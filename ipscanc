@@ -1,0 +1,113 @@
+#!/bin/bash 
+
+
+dotdec='(?<=[^0-9.]|^)[1-9][0-9]{0,2}(\.([0-9]{0,3})){3}(?=[^0-9.]|$)'
+dothex='0x[a-eA-E0-9]{1,2}\.0x[a-eA-E0-9]{1,2}\.0x[a-eA-E0-9]{1,2}\.0x[a-eA-E0-9]{1,2}'
+dotoct='[0-7]{4}\.[0-7]{4}\.[0-7]{4}\.[0-7]{4}'
+dotbin='[10]{8}\.[10]{8}\.[10]{8}\.[10]{8}'
+bin='[10]{32}'
+oct='(?<!\d)0[1-7][0-7]{10}(?!\d)'
+hex='0x[a-eA-E0-9]{8}'
+dec='(?<!\d)[0-9]{10}(?!\d)'
+target=''
+wasdot=0
+
+scan4ip()
+{
+	loc=""
+	target="$(echo "$1" | grep -Po "$2")"
+	if [[ -n $target ]]
+	then
+		return 1
+	else
+		return 0
+	fi
+	
+}
+
+
+makedotdec()
+{
+	IFS=$'\n'
+
+	if [[ $format == "dotted " || $wasdot == 1 ]]
+	then
+		wasdot=0
+        	for ip in $2 
+        	do
+        		IFS=$'.'
+                	final=''
+                	for octal in $ip
+                	do
+				octal=`echo ${octal^^} | sed 's/^0X//'`
+				final+=`echo "obase=10; ibase=$1; $octal" | bc`
+                        	final+='.'
+                	done
+                	IFS=$'\n'
+                	final=`echo "$final" | sed 's/\.$//'`
+			echo -e "$final"
+			values+="\t"$final"\n"
+			echo -e "Running list: $values"
+
+        	done
+
+	else
+		for ip in $2
+		do
+			ip=`echo ${ip^^} | sed 's/^0X//'`
+			binip=`echo "obase=2; ibase=$1; $ip" | bc`
+			temp=''
+
+			temp=`echo $binip | sed 's/\([10]\{8\}\)/\1\./g'`
+			temp=`echo $temp | sed 's/\.$//'`
+
+
+			wasdot=1
+                        makedotdec 2 "$temp"	
+		done
+
+        fi
+
+}
+
+convert()
+{
+	 scan4ip "$1" "$2"
+         if [[ $? == 1 ]]
+         then
+		 getdot=`echo "$2" | grep -e '\.'`
+
+		 if [[ -n $getdot ]]
+		 then
+		     format="dotted "
+		 else
+		     format=""
+		 fi
+
+		 case $3 in
+		"2") base="binary";;
+		"8") base="octal";;
+		"10") base="decimal";;
+		"16") base="hexadecimal";;
+		 esac
+
+                 echo -e "Dotdec of $format$base value:"
+		 makedotdec "$3" "$target"
+	 fi
+         target=''
+	 format=''
+}
+
+while read line || [[ -n "$line" ]]; do
+
+    convert "$line" "$dotdec" "10"
+    convert "$line" "$dothex" "16"    
+    convert "$line" "$dotoct" "8"
+    convert "$line" "$dotbin" "2"
+    convert "$line" "$bin" "2"
+    convert "$line" "$oct" "8"
+    convert "$line" "$hex" "16"
+    convert "$line" "$dec" "10"
+
+done < $1
+

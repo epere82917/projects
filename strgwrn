@@ -1,0 +1,20 @@
+#!/bin/bash
+
+count=0
+limit=`df -t ext4 -t vfat | awk 'NR>1{print $5}'`
+filesys=( `df -t ext4 -t vfat | awk 'NR>1{print $1}'` )
+
+
+while read value; do
+	alert="Warning: File system ${filesys[$count]} here is at $value of capacity." 
+	if (("${value%?}" > 90)); then
+		#mailx -s "Critical "$alert"" $1 &
+		echo "Critical $alert!!!" 
+	elif (("${value%?}" > 60)) && (("${value%?}" < 90)); then
+		#mailx -s "$alert" $1 &
+		echo "$alert" 
+	else
+		echo "Disk space acceptable." 
+	fi 
+	((count++))
+done <<< "$limit"

@@ -1,6 +1,6 @@
 /* -------------------------------------------------------------------
   
-Program:    perezp2.c
+Program:    p2.c
 
 Objective:
 		A C program that takes a date as input and outputs the day of the week that

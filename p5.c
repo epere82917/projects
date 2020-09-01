@@ -1,7 +1,7 @@
 /* -------------------------------------------------------------------
   
-Program:    perez5.c
-Author:     Erik Perez Gonzalez
+Program:    p5.c
+
 Objective:	A program that takes information from a .dat file, sorts it, then returns the sorted list
 			and makes a file copy of the sorted list.
 		

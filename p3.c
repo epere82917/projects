@@ -1,7 +1,7 @@
 /* -------------------------------------------------------------------
   
 Program:    perez3.c
-Author:     Erik Perez Gonzalez
+
 Objective:
 		A C program that stores and prints out information about up to 10 individuals.
 		                     

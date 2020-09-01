@@ -1,6 +1,6 @@
 /* -------------------------------------------------------------------
   
-Program:    perez3.c
+Program:    p3.c
 
 Objective:
 		A C program that stores and prints out information about up to 10 individuals.

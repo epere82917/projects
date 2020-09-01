@@ -26,7 +26,7 @@ int main()
 			while (getline(myfile, line))
 			{/* Go through the list of words, word by word until the program finds a word with the same number of letters */
 				letter_it = 0;
-				
+			
 				if (scramWord.size() == line.size())
 				{ /* If Scrambled word has the same number of letters as the word presently in list... */
 					/* ...go through, letter by letter, and compare if those are in word presently in list */

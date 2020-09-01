@@ -1,7 +1,7 @@
 /* -------------------------------------------------------------------
   
 Program:    perez4.c
-Author:     Erik Perez Gonzalez
+
 Objective:
 		This program prompts user to sort information 
 		about any number of individuals and print a report accordingly.

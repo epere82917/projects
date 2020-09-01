@@ -1,6 +1,6 @@
 /* -------------------------------------------------------------------
   
-Program:    perez4.c
+Program:    p4.c
 
 Objective:
 		This program prompts user to sort information 
